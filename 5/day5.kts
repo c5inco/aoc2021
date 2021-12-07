@@ -67,9 +67,8 @@ fun printBoard(
 
 var maxX = 0
 var maxY = 0
-var overlapPoints = mutableSetOf<Point>()
 
-val validLines = lines.map { line ->
+val convertedLines = lines.map { line ->
     val newLine = convertStringToLine(line)
     val (x1, y1, x2, y2) = newLine
 
@@ -79,8 +78,9 @@ val validLines = lines.map { line ->
 }
 
 var pointsBoard = MutableList(maxY + 1) { MutableList(maxX + 1) { 0 } }
+var overlapPoints = mutableSetOf<Point>()
 
-validLines.forEach {
+convertedLines.forEach {
     val (x1, y1, x2, y2) = it
     if (y1 == y2) {
         for (i in minOf(x1, x2)..maxOf(x1, x2)) {
@@ -93,43 +93,39 @@ validLines.forEach {
     }
 }
 
-//printBoard(pointsBoard)
+printBoard(pointsBoard)
 println("Part1: ${overlapPoints.size}")
 println("-----------------")
 
-var points2Board = MutableList(maxY + 1) { MutableList(maxX + 1) { 0 } }
+pointsBoard = MutableList(maxY + 1) { MutableList(maxX + 1) { 0 } }
 
-val allLines = lines.map { line ->
-    convertStringToLine(line)
-}
-
-allLines.forEach {
+convertedLines.forEach {
     val (x1, y1, x2, y2) = it
     if (y1 == y2) {
         for (i in minOf(x1, x2)..maxOf(x1, x2)) {
-            tallyScore(points2Board, i, y1)
+            tallyScore(pointsBoard, i, y1)
         }
     } else if (x1 == x2) {
         for (i in minOf(y1, y2)..maxOf(y1, y2)) {
-            tallyScore(points2Board, x1, i)
+            tallyScore(pointsBoard, x1, i)
         }
     } else if (x1 == y1 && x2 == y2) {
         for (i in minOf(x1, x2)..maxOf(y1, y2)) {
-            tallyScore(points2Board, i, i)
+            tallyScore(pointsBoard, i, i)
          }
     } else {
         val diff = x2 - x1
         if (x2 - x1 < 0 && y2 - y1 < 0) {
-            tallyDiagonalScore(it, points2Board, diff, true, true)
+            tallyDiagonalScore(it, pointsBoard, diff, true, true)
         } else if (x2 - x1 < 0 && y2 - y1 > 0) {
-            tallyDiagonalScore(it, points2Board, diff, true, false)
+            tallyDiagonalScore(it, pointsBoard, diff, true, false)
         } else if (x2 - x1 > 0 && y2 - y1 > 0) {
-            tallyDiagonalScore(it, points2Board, diff, false, false)
+            tallyDiagonalScore(it, pointsBoard, diff, false, false)
         } else {
-            tallyDiagonalScore(it, points2Board, diff, false, true)
+            tallyDiagonalScore(it, pointsBoard, diff, false, true)
         }
     }
 }
 
-//printBoard(points2Board)
+printBoard(pointsBoard)
 println("Part2: ${overlapPoints.size}")
