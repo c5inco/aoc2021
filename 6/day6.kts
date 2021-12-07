@@ -43,5 +43,5 @@ for (i in 0 until part2Days) {
     days[(today + 7) % days.size] += days[today]
 }
 
-println(days.sum())
+println("Part2: After $part2Days days - ${days.sum()}")
 
